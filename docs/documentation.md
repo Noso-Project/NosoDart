@@ -4,11 +4,13 @@
 
 ### Table of contents
 - [Instructions for interacting with nodes](#instructions-for-interacting-with-nodes)
-- [Get the status of the node](#getNodeStatus)
+- [1. Get the status of the node](#getNodeStatus)
+- [2. Receiving the balance at the specified address](#getBalanceAddress)
+- [3. Get a list of nodes that are currently online](#getNodeList)
 
 ## Instructions for interacting with nodes
 
-We offer you an easy-to-use construction in which we create a connection to a node, send it a request and receive a response (list of unicodes).
+We offer you an easy-to-use construction in which we create a connection to a node, send it a request and receive a response List<int> (UnicodeChar).
 
 **Recommend that you do not forget to handle exceptions, as well as check the response for emptiness and errors.**
 
@@ -20,7 +22,7 @@ We offer you an easy-to-use construction in which we create a connection to a no
       var socket = await Socket.connect(seed.ip, seed.port, timeout: const Duration(seconds: 2000);
       // Write the necessary request to the server
       socket.write(request);
-      // Example of getting a response as a list of unicodes
+      // Example of getting a response as a List<int> (UnicodeChar)
       await for (var byteData in socket) {
         responseBytes.addAll([...byteData]);
       }
@@ -41,29 +43,42 @@ We offer you an easy-to-use construction in which we create a connection to a no
   }
 
 ```
+---
 
-<a id="getNodeStatus">### 1. Get the status of the node</a>
+### 1. <a id="getNodeStatus">Get the status of the node</a>
+This method returns information about the node if it is working normally, otherwise it returns the node status. 
+```dart
+var response = await fetchNode(NodeRequest.getNodeStatus, seed);
+Node node = Node().parseResponseNode(response);
+```
+Example of a decoded response if the node is online. 
+> NODESTATUS 39 145478 0 0 6F029 0.4.1Ba1 1705512443 8761C 304 1AA4FC7A831ED76CF83F18372F8F7947 FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF1 1705512000 NpryectdevepmentfundsGE 0 234 FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF1 1DEE2 9A623 F8CC2 FBE0E
+---
+
+### 2.  <a id="getBalanceAddress">Receiving the balance at the specified address</a>
+This is a request to find out the actual balance of the address.
+```dart
+var response = await fetchNode(NodeRequest.getAddressBalance("N4ZR3fKhTUod34evnEcDQX3i6XufBDU"), seed);
+
+// This method converts the response to a double balance.
+// It is recommended to use the valueString parameter for this request, but never fromPsk;
+double hashBalance = NosoMath().bigIntToDouble(valueString: String.fromCharCodes(response as Iterable<int>));
+
+//hashBalance = 2278.03441877
+```
+The node returns the following response
+> 227803441877
+---
+
+### 3. <a id="getNodeList">Get a list of nodes that are currently online</a>
 
 ```dart
-// Empty
+var response = await fetchNode(NodeRequest.getNodeList), seed);
+List<Seed> listUserNodes = Seed().parseSeeds(response);
 ```
 
-
-### 2. Receiving the balance at the specified address
-
-```dart
-// Connect to the node via a socket, and write the following to it
-var request = await fetchNode(NodeRequest.getAddressBalance("N4ZR3fKhTUod34evnEcDQX3i6XufBDU"), seed);
-
-// The socket will respond with a List<int> which you can pass to the following method to convert the balance to a double.
-double hashBalance = NosoMath().bigIntToDouble(valueString: String.fromCharCodes(request as Iterable<int>));
-```
-
-### 3. Get a list of nodes that are currently online
-
-```dart
-// Empty
-```
+The Node returns a list of active nodes of the last block
+> 145488 1.169.139.141;8080:N4YubUBaEemehazgZqKD3R8hJM7zZEt:141 1.169.164.228;22222:N4DtatnoVsdUQ7UUoGDKc78hUUj2kEX:143 1.169.182.141;18080:N3eLTneZtG3VCkU5uGeyV1K9CNaD4Cc:422 ...
 
 ### 4. Get Pendings
 
