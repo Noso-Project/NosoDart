@@ -6,7 +6,7 @@
 - [Instructions for interacting with nodes](#instructions-for-interacting-with-nodes)
 - [1. Get the status of the node](#1-get-the-status-of-the-node)
 - [2. Receiving the balance at the specified address](#2--receiving-the-balance-at-the-specified-address)
-- [3. Get a list of nodes that are currently online](#2--receiving-the-balance-at-the-specified-address)
+- [3. Get a list of nodes that are currently online](#3-get-a-list-of-nodes-that-are-currently-online)
 
 ## Instructions for interacting with nodes
 
