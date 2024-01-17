@@ -4,9 +4,9 @@
 
 ### Table of contents
 - [Instructions for interacting with nodes](#instructions-for-interacting-with-nodes)
-- [1. Get the status of the node](#getNodeStatus)
-- [2. Receiving the balance at the specified address](#getBalanceAddress)
-- [3. Get a list of nodes that are currently online](#getNodeList)
+- [1. Get the status of the node](#1-get-the-status-of-the-node)
+- [2. Receiving the balance at the specified address](#2--receiving-the-balance-at-the-specified-address)
+- [3. Get a list of nodes that are currently online](#2--receiving-the-balance-at-the-specified-address)
 
 ## Instructions for interacting with nodes
 
