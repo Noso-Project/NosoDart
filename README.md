@@ -1,13 +1,10 @@
 # NosoDart
 
-Short description or tagline for your package.
+The library, designed for Flutter/Dart, offers a convenient API for seamless interaction with Noso Coin. It provides essential models and methods for app integration with Noso Coin, ensuring swift solutions and efficient implementations
 
 [![Pub Version](https://img.shields.io/pub/v/NosoDart)](https://pub.dev/packages/NosoDart)
 [![GitHub License](https://img.shields.io/github/license/Noso-Project/NosoDart)](https://opensource.org/licenses/MIT)
 
-## Overview
-
-The library, designed for Flutter/Dart, offers a convenient API for seamless interaction with Noso Coin. It provides essential models and methods for app integration with Noso Coin, ensuring swift solutions and efficient implementations
 
 ## Installation
 
