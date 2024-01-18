@@ -15,6 +15,8 @@ We offer you an easy-to-use construction in which we create a connection to a no
 **Recommend that you do not forget to handle exceptions, as well as check the response for emptiness and errors.**
 
 ```dart
+// request - A command to request a node, which can be obtained in NodeRequest.
+// seed - Selected seed to which the connection is established.
  Future<List<int>> fetchNode(String request, Seed seed) async {
     final responseBytes = <int>[];
     try {
@@ -72,11 +74,13 @@ The node returns the following response
 
 ### 3. <a id="getNodeList">Get a list of nodes that are currently online</a>
 
+This method returns the list of seeds and the owner's hash that worked in the last block. This is used to
+
 ```dart
 var response = await fetchNode(NodeRequest.getNodeList), seed);
 List<Seed> listUserNodes = Seed().parseSeeds(response);
-```
 
+```
 The Node returns a list of active nodes of the last block
 > 145488 1.169.139.141;8080:N4YubUBaEemehazgZqKD3R8hJM7zZEt:141 1.169.164.228;22222:N4DtatnoVsdUQ7UUoGDKc78hUUj2kEX:143 1.169.182.141;18080:N3eLTneZtG3VCkU5uGeyV1K9CNaD4Cc:422 ...
 
