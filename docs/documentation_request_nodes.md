@@ -7,6 +7,8 @@
 - [1. Get the status of the node](#1-get-the-status-of-the-node)
 - [2. Receiving the balance at the specified address](#2--receiving-the-balance-at-the-specified-address)
 - [3. Get a list of nodes that are currently online](#3-get-a-list-of-nodes-that-are-currently-online)
+- [4. Get Pending](#3-get-a-list-of-nodes-that-are-currently-online)
+- [5. Get and decrypt summary.psk](#3-get-a-list-of-nodes-that-are-currently-online)
 
 ## Instructions for interacting with nodes
 
@@ -77,25 +79,60 @@ The node returns the following response
 This method returns the list of seeds and the owner's hash that worked in the last block. This is used to
 
 ```dart
-var response = await fetchNode(NodeRequest.getNodeList), seed);
+var response = await fetchNode(NodeRequest.getNodeList, seed);
 List<Seed> listUserNodes = Seed().parseSeeds(response);
+```
 
-```
 The Node returns a list of active nodes of the last block
 > 145488 1.169.139.141;8080:N4YubUBaEemehazgZqKD3R8hJM7zZEt:141 1.169.164.228;22222:N4DtatnoVsdUQ7UUoGDKc78hUUj2kEX:143 1.169.182.141;18080:N3eLTneZtG3VCkU5uGeyV1K9CNaD4Cc:422 ...
+---
 
-### 4. Get Pendings
+### 4. <a id="getPendingsList">Get Pending</a>
 
-```dart
-// Empty
-```
-
-### 5. Get and decrypt summary.psk
+This method returns all pending that are not authorized in this block.
 
 ```dart
-// Empty
+var response = await fetchNode(NodeRequest.getPendingsList, seed);
+List<Pending> pending = Pending().parsePendings(responsePendings);
 ```
 
+Currently, all nodes support this version of the string, without the transaction ID.
+> TRFR,N27ya6hcwoZgnHjjQbrmVRuExwZf2HC,N4ZR3fKhTUod34evnEcDQX3i6XufBDU,321000000,1000000
+
+But this method also involves parsing data from the transaction ID.
+> TRFR,OR65a30n8uzg9f5660aoc4pfxisov4gda11ydc5hgvtutnmr341n,N27ya6hcwoZgnHjjQbrmVRuExwZf2HC,N4ZR3fKhTUod34evnEcDQX3i6XufBDU,321000000,1000000 
+---
+
+### 5. <a id="getSummaryZip">Get and decrypt summary.psk</a>
+
+This example shows how to get a database of addresses and their balances. Be sure to remove the header of the Summary.zip file, otherwise it may be unreadable.
+
+```dart
+var responsePsk = await fetchNode(NodeRequest.getSummaryZip, seed);
+```
+
+Write the resulting byte array to the Summary.zip file. Before unpacking the archive, remember to remove the zip file header.
+
+```dart
+// You can delete the file header as follows.
+final Uint8List bytes = Uint8List.fromList(responsePsk);
+
+// return breakpoint at which the bytes of the .psk file begin
+int breakpoint = NosoHandler.removeZipHeaderPsk(bytes);
+
+if (breakpoint != 0) {
+final Uint8List modifiedBytes = bytes.sublist(breakpoint);
+// writing a file from these modified bytes
+} 
+```
+
+Decode the .psk file and get the SummaryData array
+
+```dart
+ Uint8List bytesPsk = await File("../Summary.psk").readAsBytes();
+ List<SummaryData> arraySummary = WalletHandler.extractSummaryData(bytesPsk);
+```
+---
 
 ### 6. Create a line for payment and send the order
 
