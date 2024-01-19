@@ -7,8 +7,8 @@
 - [1. Get the status of the node](#1-get-the-status-of-the-node)
 - [2. Receiving the balance at the specified address](#2--receiving-the-balance-at-the-specified-address)
 - [3. Get a list of nodes that are currently online](#3-get-a-list-of-nodes-that-are-currently-online)
-- [4. Get Pending](#3-get-a-list-of-nodes-that-are-currently-online)
-- [5. Get and decrypt summary.psk](#3-get-a-list-of-nodes-that-are-currently-online)
+- [4. Get Pending](#4-get-pending)
+- [5. Get and decrypt summary.psk](#5-get-and-decrypt-summarypsk)
 
 ## Instructions for interacting with nodes
 
@@ -53,7 +53,7 @@ We offer you an easy-to-use construction in which we create a connection to a no
 This method returns information about the node if it is working normally, otherwise it returns the node status. 
 ```dart
 var response = await fetchNode(NodeRequest.getNodeStatus, seed);
-Node node = Node().parseResponseNode(response);
+Node node = DataParser.parseDataNode(response);
 ```
 Example of a decoded response if the node is online. 
 > NODESTATUS 39 145478 0 0 6F029 0.4.1Ba1 1705512443 8761C 304 1AA4FC7A831ED76CF83F18372F8F7947 FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF1 1705512000 NpryectdevepmentfundsGE 0 234 FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF1 1DEE2 9A623 F8CC2 FBE0E
@@ -80,7 +80,7 @@ This method returns the list of seeds and the owner's hash that worked in the la
 
 ```dart
 var response = await fetchNode(NodeRequest.getNodeList, seed);
-List<Seed> listUserNodes = Seed().parseSeeds(response);
+List<Seed> listUserNodes = DataParser.parseDataSeeds(response);
 ```
 
 The Node returns a list of active nodes of the last block
@@ -93,7 +93,7 @@ This method returns all pending that are not authorized in this block.
 
 ```dart
 var response = await fetchNode(NodeRequest.getPendingsList, seed);
-List<Pending> pending = Pending().parsePendings(responsePendings);
+List<Pending> pending = DataParser.parseDataPendings(responsePendings);
 ```
 
 Currently, all nodes support this version of the string, without the transaction ID.
@@ -129,8 +129,8 @@ final Uint8List modifiedBytes = bytes.sublist(breakpoint);
 Decode the .psk file and get the SummaryData array
 
 ```dart
- Uint8List bytesPsk = await File("../Summary.psk").readAsBytes();
- List<SummaryData> arraySummary = WalletHandler.extractSummaryData(bytesPsk);
+ Uint8List bytesPsk = await File("Summary.psk").readAsBytes();
+ List<SummaryData> arraySummary = DataParser.parseSummaryData(bytesPsk);
 ```
 ---
 
