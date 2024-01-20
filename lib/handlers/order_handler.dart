@@ -56,9 +56,13 @@ class OrderHandler {
           // Custom order-specific configurations.
           nodeRequest = _sendAliasOrder;
           commission = NosoConst.customizationFee;
-          signature = NosoSigner().signMessage(
+          var nSignature = NosoSigner().signMessage(
               'Customize this ${orderData.currentAddress.hash} ${orderData.receiver}',
               orderData.currentAddress.privateKey);
+          if (nSignature == null) {
+            return null;
+          }
+          signature = nSignature;
           trfrID = NosoCore().getTransferHash(
               currentTime + orderData.currentAddress.hash + orderData.receiver);
 
@@ -74,9 +78,12 @@ class OrderHandler {
               orderData.amount.toString() +
               commission.toString() +
               trxLine.toString());
-          signature = NosoSigner().signMessage(
+          var nSignature = NosoSigner().signMessage(
               messageSignature, orderData.currentAddress.privateKey);
-
+          if (nSignature == null) {
+            return null;
+          }
+          signature = nSignature;
           trfrID = NosoCore().getTransferHash(currentTime +
               orderData.currentAddress.hash +
               orderData.receiver +

@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:noso_dart/models/keys_pair.dart';
+
 import '../crypto/noso_signer.dart';
 import '../models/noso/address_object.dart';
 import '../models/noso/node.dart';
@@ -260,7 +262,9 @@ class DataParser {
 
       if (addressObject.privateKey.length == 44 &&
           addressObject.publicKey.length == 88) {
-        bool verification = NosoSigner().verifyKeysPair(addressObject.publicKey, addressObject.privateKey);
+        bool verification = NosoSigner().verifyKeysPair(KeyPair(
+            publicKey: addressObject.publicKey,
+            privateKey: addressObject.privateKey));
         if (verification) {
           address.add(addressObject);
         }

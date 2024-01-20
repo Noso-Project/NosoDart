@@ -13,29 +13,30 @@ class AddressHandler {
   ///
   /// Parameters:
   /// - [keys] A space-separated string containing a public key and a private key.
+  /// - [keyPair] An optional parameter of type KeyPair to provide a custom KeyPair for verification.
   ///
   /// Returns:
   /// An AddressObject if the key pair is valid; otherwise, returns null.
+  ///
+  static AddressObject? importAddressForKeysPair(String keys,
+      {KeyPair? keyPair}) {
+    KeyPair valueKeys = keyPair == null
+        ? KeyPair(publicKey: "", privateKey: "").fromString(keys)
+        : keyPair;
 
-  static AddressObject? importAddressForKeysPair(String keys) {
-    List<String> keyParts = keys.split(' ');
-
-    if (keyParts.length == 2) {
-      String publicKeyPart = keyParts[0];
-      String privateKeyPart = keyParts[1];
-
-      bool verification =
-          NosoSigner().verifyKeysPair(publicKeyPart, privateKeyPart);
-      if (verification &&
-          privateKeyPart.length == 44 &&
-          publicKeyPart.length == 88) {
-        return AddressObject(
-            hash: NosoCore().getAddressFromPublicKey(publicKeyPart),
-            privateKey: privateKeyPart,
-            publicKey: publicKeyPart);
-      }
+    if (!valueKeys.isValid()) {
+      return null;
     }
-    return null;
+
+    bool verification = NosoSigner().verifyKeysPair(KeyPair(
+        publicKey: valueKeys.publicKey, privateKey: valueKeys.privateKey));
+    if (!verification) {
+      return null;
+    }
+    return AddressObject(
+        hash: NosoCore().getAddressFromPublicKey(valueKeys.publicKey),
+        privateKey: valueKeys.privateKey,
+        publicKey: valueKeys.publicKey);
   }
 
   /// Generates a new address using NosoCore's key pair generation.
@@ -47,11 +48,11 @@ class AddressHandler {
   /// Returns:
   /// An [AddressObject] representing the newly created address.
   static AddressObject createNewAddress() {
-    KeyPair keysPair = NosoCore().generateKeyPair();
+    KeyPair keyPair = NosoCore().generateKeyPair();
     return AddressObject(
-        publicKey: keysPair.publicKey,
-        privateKey: keysPair.privateKey,
-        hash: getAddressFromPublicKey(keysPair.publicKey));
+        publicKey: keyPair.publicKey,
+        privateKey: keyPair.privateKey,
+        hash: getAddressFromPublicKey(keyPair.publicKey));
   }
 
   /// Derives an address from a public key.
@@ -60,7 +61,7 @@ class AddressHandler {
   /// method to derive the corresponding address.
   ///
   /// Parameters:
-  /// - publicKey: The public key for which the address needs to be derived.
+  /// - [publicKey] The public key for which the address needs to be derived.
   ///
   /// Returns:
   /// A string representing the derived address.

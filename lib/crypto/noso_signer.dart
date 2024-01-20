@@ -1,13 +1,10 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:pointycastle/api.dart';
+import 'package:noso_dart/models/keys_pair.dart';
 import 'package:pointycastle/asn1/primitives/asn1_integer.dart';
 import 'package:pointycastle/asn1/primitives/asn1_sequence.dart';
-import 'package:pointycastle/digests/sha1.dart';
-import 'package:pointycastle/ecc/api.dart';
-import 'package:pointycastle/ecc/curves/secp256k1.dart';
-import 'package:pointycastle/signers/ecdsa_signer.dart';
+import 'package:pointycastle/export.dart';
 
 import '../const.dart';
 
@@ -16,26 +13,63 @@ class NosoSigner {
   final _curve = ECCurve_secp256k1();
 
   /// A method that checks the secret keys for an address
-  bool verifyKeysPair(String publicKey, String privateKey) {
-    var signature = signMessage(NosoConst.verifyMessage, privateKey);
-    return verifySignedString(NosoConst.verifyMessage, signature, publicKey);
+  bool verifyKeysPair(KeyPair keysPair) {
+    if (!keysPair.isValid()) {
+      return false;
+    }
+    var signature = signMessage(NosoConst.verifyMessage, keysPair.privateKey);
+    if (signature == null) {
+      return false;
+    }
+    return verifySignedString(
+        NosoConst.verifyMessage, signature, keysPair.publicKey);
   }
 
   /// Signs a message using a private key and returns the EC signature.
   /// Reference: https://stackoverflow.com/questions/72641616/how-to-convert-asymmetrickeypair-to-base64-encoding-string-in-dart
-  ECSignature signMessage(String message, String privateKeyBase64) {
-    Uint8List messageBytes = Uint8List.fromList(_nosoBase64Decode(message));
-    BigInt privateKeyDecode =
-        _bytesToBigInt(Uint8List.fromList(base64.decode(privateKeyBase64)));
-    ECPrivateKey privateKey = ECPrivateKey(privateKeyDecode, _curve);
+  ECSignature? signMessage(String message, String privateKeyBase64) {
+    try {
+      Uint8List messageBytes = Uint8List.fromList(_nosoBase64Decode(message));
+      BigInt privateKeyDecode =
+          _bytesToBigInt(Uint8List.fromList(base64.decode(privateKeyBase64)));
+      ECPrivateKey privateKey = ECPrivateKey(privateKeyDecode, _curve);
 
-    var signer = ECDSASigner(SHA1Digest(), _algorithmName)
-      ..init(true, PrivateKeyParameter<ECPrivateKey>(privateKey));
-    ECSignature ecSignature =
-        signer.generateSignature(messageBytes) as ECSignature;
+      var signer = ECDSASigner(SHA1Digest(), _algorithmName)
+        ..init(true, PrivateKeyParameter<ECPrivateKey>(privateKey));
+      ECSignature ecSignature =
+          signer.generateSignature(messageBytes) as ECSignature;
 
-    return ecSignature;
+      return ecSignature;
+    } catch (e) {
+      print("Error create signature: $e");
+      return null;
+    }
   }
+
+  /// Decodes a Base64-encoded string into an [ECSignature] object.
+  ///
+  /// Parameters:
+  /// - [base64Signature] A Base64-encoded string representing an ECDSA signature.
+  ///
+  /// Returns:
+  /// An [ECSignature] object decoded from the provided Base64-encoded string.
+  ///
+  /// Throws:
+  /// - [FormatException] if the decoding process fails.
+  /* ECSignature decodeBase64ToSignature(String base64Signature) {
+    // Decode the Base64 string into bytes.
+    List<int> decodedBytes = base64Decode(base64Signature);
+
+    // Decode the ASN.1 sequence to retrieve the 'r' and 's' values.
+    ASN1Sequence sequence =
+        ASN1Sequence.fromBytes(Uint8List.fromList(decodedBytes));
+    BigInt r = (sequence.elements![0] as ASN1Integer).integer!;
+    BigInt s = (sequence.elements![1] as ASN1Integer).integer!;
+
+    // Create and return the ECSignature object.
+    return ECSignature(r, s);
+  }
+  */ // add to new version
 
   /// Encodes an EC signature to a Base64-encoded string.
   String encodeSignatureToBase64(ECSignature ecSignature) {
@@ -49,16 +83,21 @@ class NosoSigner {
   /// Verifies a signed string using the provided EC signature and public key.
   bool verifySignedString(
       String message, ECSignature signature, String publicKey) {
-    final Uint8List messageBytes =
-        Uint8List.fromList(_nosoBase64Decode(message));
-    ECPoint? publicKeyPoint =
-        _curve.curve.decodePoint(base64.decode(publicKey));
-    ECPublicKey publicKeys = ECPublicKey(publicKeyPoint, _curve);
+    try {
+      final Uint8List messageBytes =
+          Uint8List.fromList(_nosoBase64Decode(message));
+      ECPoint? publicKeyPoint =
+          _curve.curve.decodePoint(base64.decode(publicKey));
+      ECPublicKey publicKeys = ECPublicKey(publicKeyPoint, _curve);
 
-    var verifier = ECDSASigner(SHA1Digest(), _algorithmName)
-      ..init(false, PublicKeyParameter<ECPublicKey>(publicKeys));
+      var verifier = ECDSASigner(SHA1Digest(), _algorithmName)
+        ..init(false, PublicKeyParameter<ECPublicKey>(publicKeys));
 
-    return verifier.verifySignature(messageBytes, signature);
+      return verifier.verifySignature(messageBytes, signature);
+    } catch (e) {
+      print("Error verify signature: $e");
+      return false;
+    }
   }
 
   /// Converts a byte array to a BigInt
