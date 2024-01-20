@@ -36,7 +36,7 @@ AddressObject? address = AddressHandler.importAddressForKeysPair("",keyPair: key
 
 ```
 
-The **importAddressForKeysPair()** method will return the **AddressObject** model if the recovery is successful, otherwise it will return **null**; 
+The **importAddressForKeysPair()** method will return the **AddressObject** model if the recovery is successful, otherwise it will return **null**.
 
 ---
 
