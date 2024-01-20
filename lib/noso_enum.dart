@@ -1,1 +1,6 @@
-enum OrderType { TRFR, CUSTOM, SNDGVT }
+enum OrderType {
+  TRFR,
+  CUSTOM,
+
+  ///SNDGVT
+}

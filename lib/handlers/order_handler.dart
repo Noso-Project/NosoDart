@@ -5,7 +5,7 @@ import 'package:pointycastle/ecc/api.dart';
 import '../const.dart';
 import '../crypto/noso_core.dart';
 import '../crypto/noso_signer.dart';
-import '../models/noso/order.dart';
+import '../models/order.dart';
 import '../utils/noso_math.dart';
 
 class OrderHandler {
@@ -18,7 +18,7 @@ class OrderHandler {
   final Map<OrderType, String> _orderTypes = {
     OrderType.TRFR: "TRFR",
     OrderType.CUSTOM: "CUSTOM",
-    OrderType.SNDGVT: "SNDGVT",
+    // OrderType.SNDGVT: "SNDGVT",
   };
 
   /// Generates a new order based on the provided [orderData] and [orderType].

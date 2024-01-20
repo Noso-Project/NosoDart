@@ -9,6 +9,8 @@
 - [3. Get a list of nodes that are currently online](#3-get-a-list-of-nodes-that-are-currently-online)
 - [4. Get Pending](#4-get-pending)
 - [5. Get and decrypt summary.psk](#5-get-and-decrypt-summarypsk)
+- [6. Generation of new order depending on the type](#6-generation-of-new-order-depending-on-the-type)
+
 
 ## Instructions for interacting with nodes
 
@@ -134,14 +136,58 @@ Decode the .psk file and get the SummaryData array
 ```
 ---
 
-### 6. Create a line for payment and send the order
+### 6. <a id="getNewOrder">Generation of new order depending on the type</a>
 
+This example shows how to generate a string for creating an order depending on the order type.
+
+The library currently supports two types of orders:
+**TRFR** - sending a payment to another address, **CUSTOM** - set an alias for the specified address.
+
+Here is an example of creating an order to send a payment to another address
 ```dart
-// Empty
+// Generate the necessary order string to send it to the node
+var orderData = OrderData(currentAddress: "N4ZR3fKhTUod34evnEcDQX3i6XufBDU", receiver: "pasichDev", currentBlock: "145478", amount: NosoMath().doubleToBigEndian(10), message: "Hello", appInfo: AppInfo(appVersion: "NOSOSOVA_1_0"));
+NewOrder? newOrder = OrderHandler().generateNewOrder(orderData,OrderType.TRFR);
+
+// Check if newOrder is not null. If you made a mistake when filling in OrderData, the method will return 0
+if (newOrder == null) { return; }
+
+// Sending the generated string for processing to the node
+var response =  await fetchNode(newOrder.getRequest(), seed);
+
+// Decrypting a node's response. 
+var result = String.fromCharCodes(response);
 ```
 
-### 7. Generate a string to change the alias and send the order
+---
 
+Here's an example of creating an alias setup order for the selected address
 ```dart
-// Empty
+var alias = "NewAlias";
+
+// Generate the necessary order string to send it to the node
+var orderData = OrderData(currentAddress: "N4ZR3fKhTUod34evnEcDQX3i6XufBDU", receiver: alias, currentBlock: "145478", amount: 0, appInfo: AppInfo(appVersion: "NOSOSOVA_1_0"));
+NewOrder? newOrder = OrderHandler().generateNewOrder(orderData,OrderType.CUSTOM);
+
+// Check if newOrder is not null. If you made a mistake when filling in OrderData, the method will return 0
+if (newOrder == null) { return; }
+
+// Sending the generated string for processing to the node
+var response =  await fetchNode(newOrder.getRequest(), seed);
+
+// Decrypting a node's response. 
+var result = String.fromCharCodes(response);
 ```
+
+If the order is generated correctly, the node will return the [orderId]
+
+> OR2w03vcemov17yc0m7q3cgd7eh54gq84bqv59qh6dt6p302zgvs
+
+If the order is generated incorrectly, the node will return an error code
+
+> ERROR 101
+
+Note: Before generating a [newOrder], be sure to check the data for validity and the existing address balance. (This api method does not perform any checks and provides the data to the node as it is).
+---
+
+
