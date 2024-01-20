@@ -56,13 +56,11 @@ class OrderHandler {
           // Custom order-specific configurations.
           nodeRequest = _sendAliasOrder;
           commission = NosoConst.customizationFee;
-          orderData =
-              orderData.copyWith(receiver: orderData.message, message: "null");
           signature = NosoSigner().signMessage(
-              'Customize this ${orderData.currentAddress.hash} ${orderData.message}',
+              'Customize this ${orderData.currentAddress.hash} ${orderData.receiver}',
               orderData.currentAddress.privateKey);
           trfrID = NosoCore().getTransferHash(
-              currentTime + orderData.currentAddress.hash + orderData.message);
+              currentTime + orderData.currentAddress.hash + orderData.receiver);
 
           break;
 
@@ -89,6 +87,7 @@ class OrderHandler {
         default:
           return null;
       }
+
       // Construct and return a new order object using the calculated parameters.
       NewOrder newOrder = NewOrder(
           headRequest:
