@@ -22,6 +22,6 @@ dependencies:
 
 ## Donations
 
-For support the project, you can send Noso to the following address:
+To support development, please consider donating Noso to the following address:
 
 > N4ZR3fKhTUod34evnEcDQX3i6XufBDU
