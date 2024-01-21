@@ -42,7 +42,7 @@ The **importAddressForKeysPair()** method will return the **AddressObject** mode
 
 ## Get hash using a public key
 
-This example shows how to get how to get an address hash with a public key.
+This example shows how to get an address hash with a public key.
 
 ```dart
 String hash = AddressHandler.getAddressFromPublicKey("examplePublicKey");
