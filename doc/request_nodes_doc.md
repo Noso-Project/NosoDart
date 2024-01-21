@@ -16,7 +16,7 @@
 
 We offer you an easy-to-use construction in which we create a connection to a node, send it a request and receive a response List<int> (UnicodeChar).
 
-**Recommend that you do not forget to handle exceptions, as well as check the response for emptiness and errors.**
+**it is recommended that you do not forget to handle exceptions, as well as check the response for emptiness and errors.**
 
 ```dart
 // request - A command to request a node, which can be obtained in NodeRequest.
