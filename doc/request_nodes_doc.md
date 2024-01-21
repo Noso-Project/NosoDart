@@ -14,7 +14,7 @@
 
 ## Instructions for interacting with nodes
 
-We offer you an easy-to-use construction in which we create a connection to a node, send it a request and receive a response List<int> (UnicodeChar).
+We offer you an easy-to-use framework to create a node connection, send requests and receive responses List<int> (UnicodeChar).
 
 **it is recommended that you do not forget to handle exceptions, as well as check the response for emptiness and errors.**
 
