@@ -16,9 +16,9 @@ dependencies:
 ```
 
 ## Documentation
-- [Interaction with addresses](https://github.com/Noso-Project/NosoDart/blob/main/docs/address_handler_doc.md)
-- [Querying nodes and processing responses](https://github.com/Noso-Project/NosoDart/blob/main/docs/documentation_request_nodes.md)
-- [Signature and verification](https://github.com/Noso-Project/NosoDart/blob/main/docs/signer_doc.md)
+- [Interaction with addresses](https://github.com/Noso-Project/NosoDart/blob/main/doc/address_handler_doc.md)
+- [Querying nodes and processing responses](https://github.com/Noso-Project/NosoDart/blob/main/doc/request_nodes_doc.md)
+- [Signature and verification](https://github.com/Noso-Project/NosoDart/blob/main/doc/signer_doc.md)
 
 ## Donations
 
