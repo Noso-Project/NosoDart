@@ -2,17 +2,17 @@
 
 This package offers a user-friendly API for seamless interaction with Noso Coin. It provides the basic models and methods for integrating applications into the Noso Coin network, enabling fast solutions and efficient implementation.
 
-[![Pub Version](https://img.shields.io/pub/v/NosoDart)](https://pub.dev/packages/NosoDart)
+[![Pub Version](https://img.shields.io/pub/v/NosoDart)](https://pub.dev/packages/noso_dart)
 [![GitHub License](https://img.shields.io/github/license/Noso-Project/NosoDart)](https://opensource.org/licenses/MIT)
 
 
 ## Installation
 
-To use this package, add `nosoDart` as a dependency in your `pubspec.yaml` file.
+To use this package, add `noso_dart` as a dependency in your `pubspec.yaml` file.
 
 ```yaml
 dependencies:
-  nosoDart: ^1.0.0
+  noso_dart: ^1.0.0
 ```
 
 ## Documentation
