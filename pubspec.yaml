@@ -1,0 +1,16 @@
+name: noso_dart
+description: "Implementation of basic cryptographic functions for Noso"
+version: 1.0.0
+homepage: "https://github.com/Noso-Project/NosoDart"
+repository: "https://github.com/Noso-Project/NosoDart"
+
+
+environment:
+  sdk: '>=3.2.3 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  pointycastle: ^3.7.3
+
+license: MIT
