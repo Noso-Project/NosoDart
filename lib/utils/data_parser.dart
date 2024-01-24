@@ -174,48 +174,35 @@ class DataParser {
   /// ```
   ///
   /// Note: The method uses try-catch to handle potential exceptions during parsing, returning an empty list in case of an error.
-  static List<Pending> parseDataPendings(List<int>? response) {
+  static List<Pending>? parseDataPendings(List<int>? response) {
     if (response == null || response.isEmpty) {
-      return [];
+      return null;
     }
 
-    // Convert the list of integers to a string and split into values.
     List<String> array = String.fromCharCodes(response).split(" ");
     List<Pending> pendingList = [];
 
     try {
-      // Iterate through the array and split each value based on a comma (',') separator.
       for (String value in array) {
         var pending = value.split(",");
 
-        // Construct Pending objects based on the split values, considering different cases (5 or 6 split values).
-        if (pending.length == 5) {
-          pendingList.add(Pending(
-            orderType: pending[0],
-            sender: pending[1],
-            receiver: pending[2],
-            amountTransfer:
-                NosoMath().bigIntToDouble(valueInt: int.parse(pending[3])),
-            amountFee:
-                NosoMath().bigIntToDouble(valueInt: int.parse(pending[4])),
-          ));
-        } else if (pending.length == 6) {
+        if (pending.length >= 8) {
           pendingList.add(Pending(
             orderId: pending[0],
-            orderType: pending[1],
-            sender: pending[2],
-            receiver: pending[3],
+            orderType: pending[2],
+            sender: pending[3],
+            receiver: pending[4],
             amountTransfer:
-                NosoMath().bigIntToDouble(valueInt: int.parse(pending[4])),
-            amountFee:
                 NosoMath().bigIntToDouble(valueInt: int.parse(pending[5])),
+            amountFee:
+                NosoMath().bigIntToDouble(valueInt: int.parse(pending[6])),
           ));
         }
       }
+
       return pendingList;
     } catch (e) {
-      // Return an empty list in case of an exception during parsing.
-      return [];
+      return null;
     }
   }
 
