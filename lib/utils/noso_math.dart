@@ -6,16 +6,16 @@ import '../const.dart';
 class _DecimalIntegerModel {
   String intValue = "0";
   String decimalValue = "0";
+  double _double = 0.0;
 
   /// Sets the values based on a double value.
   void setDouble(double doubleValue) {
-    this.intValue = doubleValue.toInt().toString();
-    double decimalPart = doubleValue - doubleValue.toInt();
-    this.decimalValue = (decimalPart * 100000000).toInt().toString();
+    _double = doubleValue;
   }
 
   /// Gets the  double value
-  double get getDouble => double.parse("$intValue.$decimalValue");
+  double get getDouble =>
+      _double == 0.00000000 ? double.parse("$intValue.$decimalValue") : _double;
 
   /// Gets the integer value.
   int get getInt => int.parse(intValue);
@@ -126,7 +126,7 @@ class NosoMath {
       }
 
       if (length <= 8) {
-        returnData.setDouble(value / 100000000.0);
+        returnData.setDouble(value / 100000000);
         return returnData;
       } else {
         String integerPart = stringValue.substring(0, length - 8);
