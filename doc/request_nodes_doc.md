@@ -95,7 +95,7 @@ This method returns all pending that are not authorized in this block.
 
 ```dart
 var response = await fetchNode(NodeRequest.getPendingsList, seed);
-List<Pending> pending = DataParser.parseDataPendings(responsePendings);
+List<Pending>? pending = DataParser.parseDataPendings(responsePendings);
 ```
 
 Currently, all nodes support this version of the string, without the transaction ID.
