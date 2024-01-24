@@ -6,7 +6,7 @@ class NodeRequest {
   static const String getNodeList = "NSLMNS\n";
 
   /// Returns the list of pendings in the network, if there are none, returns an empty string. According to the pending.dart model
-  static const String getPendingsList = "NSLPEND\n";
+  static const String getPendingsList = "NSLPENDFULL\n";
 
   /// Returns a summary.zip in bytes to be unpacked and written according to the summary.dart model
   static const String getSummaryZip = "GETZIPSUMARY\n";

@@ -23,7 +23,7 @@ class KeyPair {
   ///
 
   bool isValid() {
-    return publicKey.length == 44 && privateKey.length == 88;
+    return publicKey.length == 88 && privateKey.length == 44;
   }
 
   /// Returns a string representation of the key pair in the format "publicKey privateKey".
