@@ -1,6 +1,6 @@
 ## 1.1.0
 
-* TODO
+* Create FileHandler class. (add method writeWalletFile(), more readExternalWallet())
 
 ## 1.0.3
 
