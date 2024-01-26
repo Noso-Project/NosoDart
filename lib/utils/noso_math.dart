@@ -144,4 +144,42 @@ class NosoMath {
     }
     return returnData;
   }
+
+  /// Converts a 64-bit integer to a little-endian byte array.
+  ///
+  /// Takes an integer value and creates a [ByteData] object with an 8-byte capacity,
+  /// then sets the 64-bit integer value into the [ByteData] object using little-endian byte order.
+  /// Finally, it converts the [ByteData] buffer to a [Uint8List] to obtain the byte array.
+  ///
+  /// Parameters:
+  /// - `value`: The 64-bit integer to be converted.
+  ///
+  /// Returns:
+  /// A [List<int>] representing the little-endian byte array.
+  List<int> intToBytes(int value) {
+    ByteData byteData = ByteData(8); // 8 bytes for a 64-bit integer
+    byteData.setInt64(
+        0, value, Endian.little); // Assuming little-endian byte order
+    return byteData.buffer.asUint8List();
+  }
+
+  /// Converts a double-precision floating-point number to a little-endian byte array.
+  ///
+  /// Takes a double value and creates a [ByteData] object with an 8-byte capacity,
+  /// then sets the double value into the [ByteData] object using little-endian byte order.
+  /// Finally, it converts the [ByteData] buffer to a [Uint8List] to obtain the byte array.
+  ///
+  /// Parameters:
+  /// - `value`: The double-precision floating-point number to be converted.
+  ///
+  /// Returns:
+  /// A [Uint8List] representing the little-endian byte array of the double value.
+  Uint8List doubleToByte(double value) {
+    var buffer = ByteData(8)
+        .buffer
+        .asByteData(); // 8 bytes for a double-precision floating-point number
+    buffer.setFloat64(
+        0, value, Endian.little); // Assuming little-endian byte order
+    return buffer.buffer.asUint8List();
+  }
 }
