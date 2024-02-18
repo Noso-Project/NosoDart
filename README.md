@@ -23,4 +23,6 @@ dependencies:
 
 To support development, please consider donating Noso to the following address:
 
-> N4ZR3fKhTUod34evnEcDQX3i6XufBDU
+> N4ZR3fKhTUod34evnEcDQX3i6XufBDU (pasichDev)
+
+> NpryectdevepmentfundsGE (Project)
