@@ -129,7 +129,7 @@ class DataParser {
   ///
   /// Returns:
   /// A list of Seed instances parsed from the response string.
-  List<Seed> parseDataSeeds(List<int>? response) {
+  static List<Seed> parseDataSeeds(List<int>? response) {
     if (response == null || response.isEmpty) {
       return [];
     }
