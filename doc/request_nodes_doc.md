@@ -10,6 +10,7 @@
 - [4. Get pending transcations](#4-get-pending)
 - [5. Get and decrypt summary.psk](#5-get-and-decrypt-summarypsk)
 - [6. Generation of new order depending on the type](#6-generation-of-new-order-depending-on-the-type)
+- [7. Get the seed list from the cfg file](#7-get-the-seed-list-from-the-cfg-file)
 
 
 ## Instructions for interacting with nodes
@@ -188,6 +189,20 @@ If the order is generated incorrectly, the node will return an error code
 > ERROR 101
 
 Note: Before generating a [newOrder], be sure to check the data for validity and the existing address balance. (This api method does not perform any checks and provides the data to the node as it is).
+---
+
+### 7. <a id="getSeedFromCfg">Get the seed list from the cfg file</a>
+
+This method returns the network settings
+
+```dart
+var response = await fetchNode(NodeRequest.getCfg, seed);
+List<Seed> listVerSeeds = DataParser.getSeedListFromCFG(response);
+```
+
+The query returns the following heap by default
+
+> 63.227.69.162;8080:20.199.50.27;8080:107.172.21.121;8080:107.172.214.53;8080:198.23.134.105;8080:107.173.210.55;8080:5.230.55.203;8080:141.11.192.215;8080:4.233.61.8;8080: ...
 ---
 
 

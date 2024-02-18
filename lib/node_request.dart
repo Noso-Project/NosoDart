@@ -11,6 +11,9 @@ class NodeRequest {
   /// Returns a summary.zip in bytes to be unpacked and written according to the summary.dart model
   static const String getSummaryZip = "GETZIPSUMARY\n";
 
+  /// Request for configuration data
+  static const String getCfg = "NSLCFG\n";
+
   /// Returns the actual balance of the address
   static String getAddressBalance(String hash) {
     return "NSLBALANCE $hash\n";
