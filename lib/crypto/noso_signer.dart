@@ -21,7 +21,7 @@ class NosoSigner {
     if (signature == null) {
       return false;
     }
-    return verifySignedString(
+    return verifyMessage(
         NosoConst.verifyMessage, signature, keysPair.publicKey);
   }
 
@@ -56,7 +56,7 @@ class NosoSigner {
   ///
   /// Throws:
   /// - [FormatException] if the decoding process fails.
-  /* ECSignature decodeBase64ToSignature(String base64Signature) {
+  ECSignature decodeBase64ToSignature(String base64Signature) {
     // Decode the Base64 string into bytes.
     List<int> decodedBytes = base64Decode(base64Signature);
 
@@ -69,7 +69,6 @@ class NosoSigner {
     // Create and return the ECSignature object.
     return ECSignature(r, s);
   }
-  */ // add to new version
 
   /// Encodes an EC signature to a Base64-encoded string.
   String encodeSignatureToBase64(ECSignature ecSignature) {
@@ -80,9 +79,8 @@ class NosoSigner {
     return base64Encode(encoded);
   }
 
-  /// Verifies a signed string using the provided EC signature and public key.
-  bool verifySignedString(
-      String message, ECSignature signature, String publicKey) {
+  /// Verifies a signed message using the provided EC signature and public key.
+  bool verifyMessage(String message, ECSignature signature, String publicKey) {
     try {
       final Uint8List messageBytes =
           Uint8List.fromList(_nosoBase64Decode(message));
