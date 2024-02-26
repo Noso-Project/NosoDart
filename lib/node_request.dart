@@ -14,6 +14,9 @@ class NodeRequest {
   /// Request for configuration data
   static const String getCfg = "NSLCFG\n";
 
+  /// Returns gvts file
+  static const String getGvts = "NSLGVT\n";
+
   /// Returns the actual balance of the address
   static String getAddressBalance(String hash) {
     return "NSLBALANCE $hash\n";

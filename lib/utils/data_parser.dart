@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:noso_dart/models/noso/gvt.dart';
+
 import '../models/noso/node.dart';
 import '../models/noso/pending.dart';
 import '../models/noso/seed.dart';
@@ -225,18 +227,59 @@ class DataParser {
     if (input.isEmpty) return [];
 
     List<Seed> seedList = [];
-    List<String> values = input.split(' ');
+    try {
+      List<String> values = input.split(' ');
 
-    if (values.length >= 5) {
-      List<String> poolData = values[1].split(':');
-      for (String data in poolData) {
-        List<String> seed = data.split(';');
-        if (seed.length >= 2) {
-          seedList.add(Seed(ip: seed[0], port: int.parse(seed[1])));
+      if (values.length >= 5) {
+        List<String> poolData = values[1].split(':');
+        for (String data in poolData) {
+          List<String> seed = data.split(';');
+          if (seed.length >= 2) {
+            seedList.add(Seed(ip: seed[0], port: int.parse(seed[1])));
+          }
         }
       }
-    }
 
-    return seedList;
+      return seedList;
+    } catch (e) {
+      return seedList;
+    }
+  }
+
+  /// Converts a list of integers representing GVT data into a list of Gvt objects.
+  ///
+  /// The [gvtFile] parameter is a list of integers representing binary GVT data.
+  /// The binary data is parsed in chunks of 105 bytes to extract information about each Gvt.
+  /// Each Gvt object consists of three components: 'numer', 'addressHash', and 'hashGvt'.
+  ///
+  /// The [gvtFile] is expected to have a specific structure where each Gvt entry
+  /// occupies 105 bytes with specific offsets for 'numer', 'addressHash', and 'hashGvt'.
+  ///
+  /// If [gvtFile] is null or empty, an empty list is returned.
+  /// If there's an error during parsing, the method returns the parsed Gvt list up to that point.
+  ///
+  static List<Gvt> getGvtList(List<int>? gvtFile) {
+    if (gvtFile == null || gvtFile.isEmpty) {
+      return [];
+    }
+    int index = 20;
+    List<Gvt> gvtList = [];
+    try {
+      var fileBytes = Uint8List.fromList(gvtFile);
+      while (index + 105 <= fileBytes.length) {
+        String numer =
+            String.fromCharCodes(fileBytes.sublist(index + 0, index + 2));
+        String hash =
+            String.fromCharCodes(fileBytes.sublist(index + 3, index + 34));
+        String hashToken =
+            String.fromCharCodes(fileBytes.sublist(index + 36, index + 100));
+        gvtList.add(Gvt(
+            numer: int.parse(numer), addressHash: hash, hashGvt: hashToken));
+        index += 105;
+      }
+      return gvtList;
+    } catch (e) {
+      return gvtList;
+    }
   }
 }
