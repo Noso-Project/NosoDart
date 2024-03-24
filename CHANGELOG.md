@@ -1,4 +1,4 @@
-## 1.1.0
+## 1.2.0
 
 * Fixing bugs from the previous version
 * Extend the NosoSignuture class by adding base64 decoder to ECSignature
