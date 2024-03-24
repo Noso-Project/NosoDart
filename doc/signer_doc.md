@@ -30,10 +30,16 @@ ECSignature? ecSignature = NosoSigner().signMessage("exampleMessage", "examplePr
 
 The **signMessage()** method will return a valid **ECSignature** if no exceptions occurred in the process, otherwise **null** will be returned;
 
-How to convert ECSignature to Base64.
+### How to encode ECSignature to Base64
 
 ```dart
 String signatureString = NosoSigner().encodeSignatureToBase64(ecSignature);
+```
+
+### How to decode Base64 to ECSignature
+
+```dart
+ECSignature decodeEcSignature = NosoSigner().decodeBase64ToSignature(signatureString);
 ```
 
 ---

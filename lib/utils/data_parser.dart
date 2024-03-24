@@ -1,9 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:noso_dart/models/keys_pair.dart';
+import 'package:noso_dart/models/noso/gvt.dart';
 
-import '../crypto/noso_signer.dart';
-import '../models/noso/address_object.dart';
 import '../models/noso/node.dart';
 import '../models/noso/pending.dart';
 import '../models/noso/seed.dart';
@@ -129,7 +127,7 @@ class DataParser {
   ///
   /// Returns:
   /// A list of Seed instances parsed from the response string.
-  List<Seed> parseDataSeeds(List<int>? response) {
+  static List<Seed> parseDataSeeds(List<int>? response) {
     if (response == null || response.isEmpty) {
       return [];
     }
@@ -206,57 +204,82 @@ class DataParser {
     }
   }
 
-  /// Parses an external wallet file represented by a Uint8List.
-  /// The file format is assumed to follow a specific structure:
-  /// Each record in the file consists of 625 bytes, starting from the beginning.
-  /// The record structure:
-  /// Byte 1: Length of the hash (N)
-  /// Bytes 2 to (N+1): Hash
-  /// Bytes 42 to (41+N): Custom data
-  /// Bytes 83 to (82+N): Public Key
-  /// Bytes 339 to (338+N): Private Key
-  /// The method returns a List<AddressObject> containing parsed AddressObject instances.
+  /// Get a list of seeds from a configuration string.
   ///
-  /// Parameters:
-  /// - fileBytes: The Uint8List representing the content of the external wallet file.
+  /// The method is designed to process a configuration string and extract
+  /// information about seeds. The configuration string should be in a format
+  /// where seeds are separated by spaces, represented by the [input] value.
   ///
-  /// Returns:
-  /// A List<AddressObject> containing parsed address objects. An empty list is returned
-  /// if the fileBytes are null or empty.
-  static List<AddressObject> parseExternalWallet(Uint8List? fileBytes) {
-    final List<AddressObject> address = [];
-    if (fileBytes == null || fileBytes.isEmpty) {
-      return address;
-    }
-    Uint8List current = fileBytes.sublist(0, 625);
-    Uint8List bytes = fileBytes.sublist(626);
+  /// If [input] is an empty string, the method returns an empty list.
+  ///
+  /// It is assumed that the configuration string has at least 5 values; otherwise,
+  /// the method may return an empty list.
+  ///
+  /// Each seed is defined by a string in the format "ip;port", where:
+  /// - "ip" is the IP address of the seed,
+  /// - "port" is the port of the seed (parsed as an integer).
+  ///
+  /// Objects of the [Seed] class are created and added to the [seedList].
+  ///
+  /// Returns the [seedList] containing [Seed] objects with information
+  /// about seeds from the configuration string.
+  static List<Seed> getSeedListFromCFG(String input) {
+    if (input.isEmpty) return [];
 
-    while (current.isNotEmpty) {
-      AddressObject addressObject = AddressObject(
-          hash: String.fromCharCodes(current.sublist(1, current[0] + 1)),
-          custom: String.fromCharCodes(current.sublist(42, 42 + current[41])),
-          publicKey:
-              String.fromCharCodes(current.sublist(83, 83 + current[82])),
-          privateKey:
-              String.fromCharCodes(current.sublist(339, 339 + current[338])));
+    List<Seed> seedList = [];
+    try {
+      List<String> values = input.split(' ');
 
-      if (bytes.length >= 626) {
-        current = bytes.sublist(0, 625);
-        bytes = bytes.sublist(626);
-      } else {
-        current = Uint8List(0);
-      }
-
-      if (addressObject.privateKey.length == 44 &&
-          addressObject.publicKey.length == 88) {
-        bool verification = NosoSigner().verifyKeysPair(KeyPair(
-            publicKey: addressObject.publicKey,
-            privateKey: addressObject.privateKey));
-        if (verification) {
-          address.add(addressObject);
+      if (values.length >= 5) {
+        List<String> poolData = values[1].split(':');
+        for (String data in poolData) {
+          List<String> seed = data.split(';');
+          if (seed.length >= 2) {
+            seedList.add(Seed(ip: seed[0], port: int.parse(seed[1])));
+          }
         }
       }
+
+      return seedList;
+    } catch (e) {
+      return seedList;
     }
-    return address;
+  }
+
+  /// Converts a list of integers representing GVT data into a list of Gvt objects.
+  ///
+  /// The [gvtFile] parameter is a list of integers representing binary GVT data.
+  /// The binary data is parsed in chunks of 105 bytes to extract information about each Gvt.
+  /// Each Gvt object consists of three components: 'numer', 'addressHash', and 'hashGvt'.
+  ///
+  /// The [gvtFile] is expected to have a specific structure where each Gvt entry
+  /// occupies 105 bytes with specific offsets for 'numer', 'addressHash', and 'hashGvt'.
+  ///
+  /// If [gvtFile] is null or empty, an empty list is returned.
+  /// If there's an error during parsing, the method returns the parsed Gvt list up to that point.
+  ///
+  static List<Gvt> getGvtList(List<int>? gvtFile) {
+    if (gvtFile == null || gvtFile.isEmpty) {
+      return [];
+    }
+    int index = 20;
+    List<Gvt> gvtList = [];
+    try {
+      var fileBytes = Uint8List.fromList(gvtFile);
+      while (index + 105 <= fileBytes.length) {
+        String numer =
+            String.fromCharCodes(fileBytes.sublist(index + 0, index + 2));
+        String hash =
+            String.fromCharCodes(fileBytes.sublist(index + 3, index + 34));
+        String hashToken =
+            String.fromCharCodes(fileBytes.sublist(index + 36, index + 100));
+        gvtList.add(Gvt(
+            numer: int.parse(numer), addressHash: hash, hashGvt: hashToken));
+        index += 105;
+      }
+      return gvtList;
+    } catch (e) {
+      return gvtList;
+    }
   }
 }
