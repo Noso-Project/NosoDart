@@ -1,3 +1,7 @@
+## 1.2.1
+
+* Fixing the parsing of GVTs
+
 ## 1.2.0
 
 * Fixing bugs from the previous version
