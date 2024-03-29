@@ -270,9 +270,9 @@ class DataParser {
         String numer =
             String.fromCharCodes(fileBytes.sublist(index + 0, index + 2));
         String hash =
-            String.fromCharCodes(fileBytes.sublist(index + 3, index + 34));
+            String.fromCharCodes(fileBytes.sublist(index + 3, index + 33));
         String hashToken =
-            String.fromCharCodes(fileBytes.sublist(index + 36, index + 100));
+            String.fromCharCodes(fileBytes.sublist(index + 34, index + 100));
         gvtList.add(Gvt(
             numer: int.parse(numer), addressHash: hash, hashGvt: hashToken));
         index += 105;
