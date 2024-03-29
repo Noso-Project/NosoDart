@@ -10,7 +10,7 @@ To use this package, add `noso_dart` as a dependency in your `pubspec.yaml` file
 
 ```yaml
 dependencies:
-  noso_dart: ^1.1.0
+  noso_dart: ^1.2.1
 ```
 
 ## Documentation
