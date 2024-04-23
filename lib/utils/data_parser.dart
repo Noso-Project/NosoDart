@@ -100,10 +100,10 @@ class DataParser {
         delta: int.tryParse(values[4]) ?? 0,
         branch: values[5],
         version: values[6],
-        lastblockhash: values[9].substring(0, 5),
-        headershash: values[14],
-        sumaryhash: values[16],
         utcTime: int.tryParse(values[7]) ?? 0,
+        lastblockhash: values[10].substring(0, 5),
+        headershash: values[15],
+        sumaryhash: values[17],
       );
     } catch (e) {
       return null;
