@@ -1,3 +1,7 @@
+## 1.2.2
+
+* Update Node model
+
 ## 1.2.1
 
 * Fixing the parsing of GVTs

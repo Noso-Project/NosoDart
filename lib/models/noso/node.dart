@@ -18,7 +18,6 @@ import 'package:noso_dart/models/noso/seed.dart';
 /// Constructor:
 ///   - Takes the [seed] parameter as a required argument and initializes other properties with default values.
 ///
-
 class Node {
   Seed seed;
   int connections;
@@ -27,6 +26,9 @@ class Node {
   int delta;
   String branch;
   String version;
+  String lastblockhash;
+  String headershash;
+  String sumaryhash;
   int utcTime;
 
   Node({
@@ -37,6 +39,9 @@ class Node {
     this.delta = 0,
     this.branch = "",
     this.version = "",
+    this.lastblockhash = "",
+    this.headershash = "",
+    this.sumaryhash = "",
     this.utcTime = 0,
   });
 
@@ -48,6 +53,9 @@ class Node {
     int? delta,
     String? branch,
     String? version,
+    String? lastblockhash,
+    String? headershash,
+    String? sumaryhash,
     int? utcTime,
   }) {
     return Node(
@@ -58,6 +66,9 @@ class Node {
       delta: delta ?? this.delta,
       branch: branch ?? this.branch,
       version: version ?? this.version,
+      lastblockhash: lastblockhash ?? this.lastblockhash,
+      headershash: headershash ?? this.headershash,
+      sumaryhash: sumaryhash ?? this.sumaryhash,
       utcTime: utcTime ?? this.utcTime,
     );
   }
