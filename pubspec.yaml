@@ -1,6 +1,6 @@
 name: noso_dart
 description: "Implementation of basic cryptographic functions for Noso"
-version: 1.2.2
+version: 1.2.3
 homepage: "https://github.com/Noso-Project/NosoDart"
 repository: "https://github.com/Noso-Project/NosoDart"
 

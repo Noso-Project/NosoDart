@@ -1,3 +1,8 @@
+## 1.2.3
+
+* Optimize file processing
+* Support for sovaRPC
+
 ## 1.2.2
 
 * Update Node model
