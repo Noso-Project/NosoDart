@@ -95,9 +95,9 @@ class FileHandler {
 
         bytes.addAll(
             nosoMath.intToBytes(nosoMath.doubleToBigEndian(wallet.balance)));
-        bytes.addAll(nosoMath.doubleToByte(0.0000000)); //Pendings
-        bytes.addAll(nosoMath.doubleToByte(0.0000000)); //Score
-        bytes.addAll(nosoMath.doubleToByte(0.0000000)); //lastOp
+        bytes.addAll([0, 0, 0, 0, 0, 0, 0, 0]); //Pendings
+        bytes.addAll([0, 0, 0, 0, 0, 0, 0, 0]); //Score
+        bytes.addAll([0, 0, 0, 0, 0, 0, 0, 0]); //lastOp
       }
 
       return bytes.isEmpty ? null : bytes;

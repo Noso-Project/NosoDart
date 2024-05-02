@@ -1,3 +1,7 @@
+## 1.2.4
+
+* Fix errors && code optimization
+
 ## 1.2.3
 
 * Optimize file processing
