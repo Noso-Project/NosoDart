@@ -4,18 +4,11 @@ version: 1.2.4
 homepage: "https://github.com/Noso-Project/NosoDart"
 repository: "https://github.com/Noso-Project/NosoDart"
 
-
 environment:
   sdk: '>=3.2.3 <4.0.0'
 
 dependencies:
-  flutter:
-    sdk: flutter
   pointycastle: ^3.7.3
   convert: ^3.1.1
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
 
 license: MIT
